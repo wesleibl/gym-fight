@@ -1,6 +1,6 @@
 from pydantic import EmailStr
-from enum import Enum
 from sqlmodel import Field, SQLModel
+from enum import Enum
 import datetime as dt
 
 class Gender(str, Enum):
@@ -17,11 +17,7 @@ class Status(str, Enum):
     PASTDUE = "pastdue"
     BLOCKED = "blocked"
 
-class Role(str, Enum):
-    STUDENT = "student"
-    INSTRUCTOR = "instructor"
-
-class StudentBase(SQLModel):
+class UserBase(SQLModel):
     name: str
     email: EmailStr
     gender: Gender
@@ -29,26 +25,26 @@ class StudentBase(SQLModel):
     phone: str
 
 
-class Student(StudentBase, table=True):
+class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
-    role: Role = Role.STUDENT
+    is_instructor: bool
     level: Level = Level.BEGINNER
     is_athletic: bool = False
     status: Status = Status.ACTIVE
     created_at: dt.datetime = Field(default_factory=dt.datetime.utcnow)
 
-class StudentCreate(StudentBase):
+class UserCreate(UserBase):
     password: str
 
-class StudentUpdate(SQLModel):
+class UserUpdate(SQLModel):
     name: str
     email: EmailStr
     phone: str
 
-class StudentResponse(StudentBase):
+class UserResponse(UserBase):
     id: int | None
-    role: Role
+    is_instructor: bool
     level: Level
     is_athletic: bool
     status: Status
