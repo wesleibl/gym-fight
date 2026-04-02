@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.models.Student import StudentCreate
+from app.models.student import StudentCreate
 
 router = APIRouter()
 

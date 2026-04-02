@@ -1,5 +1,7 @@
-fastapi
+fastapi[standard]
 pyjwt
 pwdlib[argon2]
 Pydantic
 email-validator
+sqlmodel
+pydantic-settings
