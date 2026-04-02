@@ -1,0 +1,5 @@
+fastapi
+pyjwt
+pwdlib[argon2]
+Pydantic
+email-validator
