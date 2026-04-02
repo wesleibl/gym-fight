@@ -28,9 +28,9 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
-    is_instructor: bool
     level: Level = Level.BEGINNER
     is_athletic: bool = False
+    is_instructor: bool = False
     status: Status = Status.ACTIVE
     created_at: dt.datetime = Field(default_factory=dt.datetime.utcnow)
 

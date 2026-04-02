@@ -43,8 +43,17 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
+        is_instructor = payload.get("is_instructor")
         if email is None:
             raise credentials_exception
     except InvalidTokenError:
         raise credentials_exception
-    return email
+    return {"email": email, "is_instructor": is_instructor}
+
+def require_instructor(current_user: Annotated[dict, Depends(get_current_user)]):
+    if not current_user["is_instructor"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access Denied"
+        )
+    return current_user
