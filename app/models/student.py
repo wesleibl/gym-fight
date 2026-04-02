@@ -31,6 +31,7 @@ class StudentBase(SQLModel):
 
 class Student(StudentBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    hashed_password: str
     role: Role = Role.STUDENT
     level: Level = Level.BEGINNER
     is_athletic: bool = False
