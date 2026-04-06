@@ -38,9 +38,9 @@ class UserCreate(UserBase):
     password: str
 
 class UserUpdate(SQLModel):
-    name: str
-    email: EmailStr
-    phone: str
+    name: str | None = None
+    email: EmailStr | None = None
+    phone: str | None = None
 
 class UserResponse(UserBase):
     id: int | None
