@@ -12,6 +12,9 @@ from app.models.user import User
 class LevelUpdate(SQLModel):
     level: Level
 
+class InstructorUpdate(SQLModel):
+    is_instructor: bool
+
 router = APIRouter()
 SessionDep = Annotated[Session, Depends(get_session)]
 
@@ -79,6 +82,21 @@ async def update_user_level(id: int, current_user: Annotated[dict, Depends(requi
         raise HTTPException(status_code=404, detail="User not found")
 
     user.level = levelUpdate.level
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return UserResponse.model_validate(user)
+
+@router.patch("/users/{id}/instructor")
+async def change_instructor_status(id: int, current_user: Annotated[dict, Depends(require_instructor)], session: SessionDep, instructorUpdate: InstructorUpdate):
+    user = session.exec(select(User).where(User.id == id)).first()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.is_instructor = instructorUpdate.is_instructor
 
     session.add(user)
     session.commit()
