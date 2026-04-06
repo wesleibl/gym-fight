@@ -1,9 +1,12 @@
+from sqlalchemy import false
+
+from app.models.token import Token
 from app.models.user import UserCreate, UserResponse
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from app.core.database import get_session
-from app.core.security import get_password_hash
+from app.core.security import get_current_user, get_password_hash, require_instructor
 from app.models.user import User
 
 router = APIRouter()
@@ -24,3 +27,21 @@ async def create_user(user: UserCreate, session: SessionDep):
     session.commit()
     session.refresh(new_user)
     return UserResponse.model_validate(new_user)
+
+@router.get("/users/")
+async def list_users(current_user: Annotated[dict, Depends(require_instructor)], session: SessionDep):
+    users = session.exec(select(User)).all()
+
+    if not users:
+        return []
+    
+    return [UserResponse.model_validate(user) for user in users]
+
+@router.get("/users/{id}")
+async def get_user_by_id(id: int, current_user: Annotated[dict, Depends(get_current_user)], session: SessionDep):
+    if not current_user['is_instructor']:
+        user = session.exec(select(User).where(current_user["email"] == User.email)).first()
+    else: 
+        user = session.exec(select(User).where(id == User.id)).first()
+
+    return UserResponse.model_validate(user)

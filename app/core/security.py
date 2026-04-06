@@ -15,7 +15,7 @@ password_hash = PasswordHash.recommended()
 
 DUMMY_HASH = password_hash.hash("dummypassword")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
