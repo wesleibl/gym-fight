@@ -1,6 +1,5 @@
 from sqlalchemy import false
 
-from app.models.token import Token
 from app.models.user import Level, UserCreate, UserResponse, UserUpdate
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
@@ -22,7 +21,7 @@ SessionDep = Annotated[Session, Depends(get_session)]
 async def create_user(user: UserCreate, session: SessionDep):
     email_already_exists = session.exec(select(User).where(User.email == user.email)).first()
 
-    if email_already_exists is not None:
+    if email_already_exists:
         raise HTTPException(status_code=400, detail="Unable to create account")
     
     new_user = User(
