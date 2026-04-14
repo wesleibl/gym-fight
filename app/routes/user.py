@@ -55,7 +55,6 @@ async def get_user_by_id(id: int, current_user: Annotated[dict, Depends(get_curr
 async def update_user(id: int, current_user: Annotated[dict, Depends(get_current_user)], session: SessionDep, userUpdate : UserUpdate):
     if not current_user['is_instructor']:
         user = session.exec(select(User).where(current_user["email"] == User.email)).first()
-
     else: 
         user = session.exec(select(User).where(User.id == id)).first()
     
@@ -102,3 +101,16 @@ async def change_instructor_status(id: int, current_user: Annotated[dict, Depend
     session.refresh(user)
 
     return UserResponse.model_validate(user)
+
+@router.get("/users/{id}/attendances")
+async def get_user_attendances(id: int, current_user: Annotated[dict, Depends(get_current_user)], session: SessionDep):
+    if not current_user['is_instructor']:
+        user = session.exec(select(User).where(current_user["email"] == User.email)).first()
+    else: 
+        user = session.exec(select(User).where(User.id == id)).first()
+    
+    attendances = session.exec(select(User).where(User.id == id)).all()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return False

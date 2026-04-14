@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from app.routes.auth import router as auth_router
 from app.routes.user import router as user_router
 from app.routes.schedule import router as schedule_router
+from app.routes.attendence import router as attendence_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -15,3 +16,4 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(schedule_router)
+app.include_router(attendence_router)
