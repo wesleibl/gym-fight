@@ -64,6 +64,10 @@ pytest tests/test_users.py
 pytest tests/test_users.py::test_create_user -v
 ```
 
+## CI
+
+O projeto usa **GitHub Actions** para rodar o `pytest` automaticamente em todo push e pull request. O workflow está em [.github/workflows/ci.yml](.github/workflows/ci.yml).
+
 ## Endpoints
 
 ### Autenticação
