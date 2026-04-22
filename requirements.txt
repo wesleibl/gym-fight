@@ -5,3 +5,5 @@ Pydantic
 email-validator
 sqlmodel
 pydantic-settings
+pytest
+httpx

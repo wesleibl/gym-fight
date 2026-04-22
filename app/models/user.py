@@ -51,3 +51,12 @@ class UserResponse(UserBase):
     created_at: dt.datetime
 
     model_config = {"from_attributes": True}
+
+class LevelUpdate(SQLModel):
+    level: Level
+
+class InstructorUpdate(SQLModel):
+    is_instructor: bool
+
+class StatusUpdate(SQLModel):
+    status: Status
